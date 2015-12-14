@@ -64,7 +64,8 @@ module.exports = React.createClass({
    * add markers to map
    */
    var markers = {};
-   
+   var gopng = "/go.png";
+   var stoppng = "/stop.png";
    $.ajax({url:"/api/locations",
      success:function(data){
        var points = [];
@@ -73,11 +74,11 @@ module.exports = React.createClass({
       for(var i = 0; i<data.length; i++){
         var item = data[i];
         console.log(`adding marker ${item.name} - ${item.lat}, ${item.long} ${item.speed}`)
-        var icon = item.speed == 0.0 ? undefined : "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png";
+        var icon = item.speed == 0.0 ? stoppng : gopng;
         var marker = createMarker({
           position: new google.maps.LatLng(item.lat, item.long),
           title:item.name,
-          icon:icon,
+          icon: item.speed == 0.0 ? stoppng : gopng,
           map: map,
           // icon: "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png"
         },
@@ -106,12 +107,11 @@ module.exports = React.createClass({
         markers[updatedData.name].setMap(null)
       }
       
-      var icon = updatedData.speed == 0.0 ? undefined : "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png";
         markers[updatedData.name] = createMarker({
           position: new google.maps.LatLng(updatedData.lat, updatedData.long),
           title:updatedData.name,
           map: map,
-          icon: icon
+          icon: item.speed == 0.0 ? stoppng : gopng
         }, `<h1>${updatedData.name}</h1><p>Lat: ${updatedData.lat} Long: ${updatedData.long}</p><p>Speed:${updatedData.speed}</p>`);
       }
     };

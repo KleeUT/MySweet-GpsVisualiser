@@ -12,7 +12,11 @@ module.exports = class{
 				return;
 			}
 			
-			this.currentInactivies[gpsPositionData.name] = {name: gpsPositionData.name, startTime: new Date()}
+			this.currentInactivies[gpsPositionData.name] = {
+				name: gpsPositionData.name,
+				lat:gpsPositionData.lat,
+				long:gpsPositionData.long, 
+				startTime: new Date()}
 
 		}
 		else{
