@@ -8,4 +8,4 @@ Build using
 
 # Run
 Run using.
-* npm run
+* npm start
