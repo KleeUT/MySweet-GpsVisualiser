@@ -19,9 +19,9 @@ app.use("/", express.static(__dirname + '/public'));
 var routes = new Routes(app, io);
 routes.initializeRoutes();
 
-var server = http.listen(process.env.port, function () {
-  var host = server.address().address;
-  var port = server.address().port;
+var server = http.listen(process.env.PORT, function () {
+  // var host = server.address().address;
+  // var port = server.address().port;
 
-  console.log(`Example app listening at http://${host}   ${port}`);
+  console.log(`Example app listening`);
 });
