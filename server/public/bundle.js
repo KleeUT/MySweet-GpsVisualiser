@@ -31876,7 +31876,7 @@
 	          position: new google.maps.LatLng(updatedData.lat, updatedData.long),
 	          title:updatedData.name,
 	          map: map,
-	          icon: item.speed == 0.0 ? stoppng : gopng
+	          icon: updatedData.speed == 0.0 ? stoppng : gopng
 	        }, `<h1>${updatedData.name}</h1><p>Lat: ${updatedData.lat} Long: ${updatedData.long}</p><p>Speed:${updatedData.speed}</p>`);
 	      }
 	    };
