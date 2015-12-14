@@ -1,6 +1,24 @@
 var React = require('react');
+
+var DetailsDisplay = React.createClass({
+  render(){
+    return (
+      <div className="well">
+        <h3>{this.props.name}</h3>
+        Latitude: {this.props.lat} <br />
+        Longitude: {this.props.long} <br />
+        Speed: {this.props.speed} <br />
+      </div>
+    );
+  }
+})
+
 module.exports = React.createClass({
+  getInitialState(){
+    return {points:[]}
+  },
   componentDidMount(){
+  var self = this;
   /*
   * declare map as a global variable
   */
@@ -46,20 +64,31 @@ module.exports = React.createClass({
    * add markers to map
    */
    var markers = {};
+   
    $.ajax({url:"/api/locations",
      success:function(data){
+       var points = [];
        console.log('successful data returned ' + data);
       //  thisReact.setState({projects:data});
-      data.forEach((item) => {
+      for(var i = 0; i<data.length; i++){
+        var item = data[i];
         console.log(`adding marker ${item.name} - ${item.lat}, ${item.long}`)
         var marker = createMarker({
           position: new google.maps.LatLng(item.lat, item.long),
           title:item.name,
           map: map,
           // icon: "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png"
-        }, item.name);
+        },
+        `<h1>${item.name}</h1><p>Lat: ${item.lat} Long: ${item.long}</p><p>Speed:${item.speed}</p>`);
         markers[item.name] = marker;
-      })
+        item["key"] = item.name;
+        points.push(item);
+      }
+      console.log(`Points Count ${points.count} - [${points}]`)
+      self.setState({points:points});
+      // data.forEach((item) => {
+        
+      // })
      },
      error:function(error){
        console.log('unsuccessful data returned ' + error);
@@ -96,7 +125,17 @@ module.exports = React.createClass({
     return(
       <div className='row'>
         <h2>Gps Visualiser</h2>
-        <div id="map_div" style={{height:400}}></div>
+        <div id="map_div" style={{height:600}} className='col-sm-12 col-md-9'></div>
+        <div className='col-sm-12 col-md-3'>
+              {this.state.points.map(item => {
+                console.log('point');
+                console.log(item);
+                return(
+                  <DetailsDisplay name={item.name} lat={item.lat} long={item.long} speed={item.speed} />
+                )
+              })}
+            
+        </div>
       </div>
     );
   }

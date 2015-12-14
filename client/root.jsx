@@ -9,7 +9,7 @@ module.exports = React.createClass({
          <h1>My Sweet</h1>
          <MapContainer></MapContainer>
          <LocationSubmitForm></LocationSubmitForm>
-         <footer><div style={{"text-align":"right"}}>Klee Uhrig-Thomas</div></footer>
+         <footer><div style={{"textAlign":"right"}}>Klee Uhrig-Thomas</div></footer>
        </div>
      );
    }
