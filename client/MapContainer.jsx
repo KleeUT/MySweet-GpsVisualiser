@@ -72,10 +72,12 @@ module.exports = React.createClass({
       //  thisReact.setState({projects:data});
       for(var i = 0; i<data.length; i++){
         var item = data[i];
-        console.log(`adding marker ${item.name} - ${item.lat}, ${item.long}`)
+        console.log(`adding marker ${item.name} - ${item.lat}, ${item.long} ${item.speed}`)
+        var icon = item.speed == 0.0 ? undefined : "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png";
         var marker = createMarker({
           position: new google.maps.LatLng(item.lat, item.long),
           title:item.name,
+          icon:icon,
           map: map,
           // icon: "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png"
         },
@@ -104,11 +106,12 @@ module.exports = React.createClass({
         markers[updatedData.name].setMap(null)
       }
       
+      var icon = updatedData.speed == 0.0 ? undefined : "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png";
         markers[updatedData.name] = createMarker({
           position: new google.maps.LatLng(updatedData.lat, updatedData.long),
           title:updatedData.name,
           map: map,
-          // icon: "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png"
+          icon: icon
         }, `<h1>${updatedData.name}</h1><p>Lat: ${updatedData.lat} Long: ${updatedData.long}</p><p>Speed:${updatedData.speed}</p>`);
       }
     };
