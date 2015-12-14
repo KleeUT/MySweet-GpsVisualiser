@@ -6,6 +6,6 @@ module.exports = class{
 			"c880b271":"Klees phone (SER)",
 		};
 		
-		return ids[id];
+		return ids[id] || id;
 	}
 }
