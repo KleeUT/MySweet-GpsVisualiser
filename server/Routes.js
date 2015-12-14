@@ -1,5 +1,6 @@
 'use strict'
 var Config = require('./Config.js');
+var InactivityTracker = require('./InactivityTracker.js');
 
 module.exports = class{
   constructor(app, io){
@@ -7,6 +8,7 @@ module.exports = class{
     this.data = {};
     this.io = io;
     this.config = new Config();
+    this.inactivityTracker = new InactivityTracker();
   }
   initializeRoutes(){
     var self = this;
@@ -34,7 +36,7 @@ module.exports = class{
       var name = data.ser;
       
       updateLocation(lat, long, name);
-      
+
       // var updatedCoordinate = {"lat":lat, "long":long,"name":name};
       // self.data[updatedCoordinate.name] = updatedCoordinate;
       // console.log(`${updatedCoordinate.lat}, ${updatedCoordinate.long}, ${updatedCoordinate.name} `)
@@ -52,14 +54,23 @@ module.exports = class{
       var speed = data.s;
       
       updateLocation(lat, long, name, speed);
-      
+      self.inactivityTracker.gpsInfoReceived({
+        name:name,
+        lat:lat,
+        long:long,
+        speed:speed
+      })      
       // var updatedCoordinate = {"lat":request.query.lat, "long":request.query.long,"name":request.query.id};
       // self.data[updatedCoordinate.name] = updatedCoordinate;
       // console.log(`${updatedCoordinate.lat}, ${updatedCoordinate.long}, ${updatedCoordinate.id} `)
       response.json({});
       // self.io.emit('UpdatePosition',{'lat':lat,"long":long,"name":name});
       self.io.emit('UpdatePosition',{'lat':lat,"long":long,"name":name, "speed":speed});
-    })
+    });
+    
+  app.get('/api/allInactivity', function(request, response){
+    response.json(self.inactivityTracker.getAllInactivities());
+  });
     
     function updateLocation(lat, long, name, speed){
       var updatedCoordinate = {"lat":lat, "long":long,"name":name, "speed":speed};
