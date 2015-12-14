@@ -1,11 +1,12 @@
 'use strict'
-
+var Config = require('./Config.js');
 
 module.exports = class{
   constructor(app, io){
     this.app = app;
     this.data = {};
     this.io = io;
+    this.config = new Config();
   }
   initializeRoutes(){
     var self = this;
@@ -30,7 +31,7 @@ module.exports = class{
       var data = JSON.parse(request.body.data);
       var lat = data.lat;
       var long = data.long;
-      var name = data.name;
+      var name = data.ser;
       
       updateLocation(lat, long, name);
       
@@ -47,21 +48,23 @@ module.exports = class{
       
       var lat = data.lat;
       var long = data.long;
-      var name = data.name;
+      var name = self.config.niceNameForId(data.name);
+      var speed = data.s;
       
-      updateLocation(lat, long, name);
+      updateLocation(lat, long, name, speed);
       
       // var updatedCoordinate = {"lat":request.query.lat, "long":request.query.long,"name":request.query.id};
       // self.data[updatedCoordinate.name] = updatedCoordinate;
       // console.log(`${updatedCoordinate.lat}, ${updatedCoordinate.long}, ${updatedCoordinate.id} `)
       response.json({});
-      self.io.emit('UpdatePosition',{'lat':lat,"long":long,"name":name});
+      // self.io.emit('UpdatePosition',{'lat':lat,"long":long,"name":name});
+      self.io.emit('UpdatePosition',{'lat':lat,"long":long,"name":name, "speed":speed});
     })
     
-    function updateLocation(lat, long, name){
-      var updatedCoordinate = {"lat":lat, "long":long,"name":name};
+    function updateLocation(lat, long, name, speed){
+      var updatedCoordinate = {"lat":lat, "long":long,"name":name, "speed":speed};
       self.data[updatedCoordinate.name] = updatedCoordinate;
-      console.log(`${updatedCoordinate.lat}, ${updatedCoordinate.long}, ${updatedCoordinate.name} `)
+      console.log(`${updatedCoordinate.lat}, ${updatedCoordinate.long}, ${updatedCoordinate.name}, ${speed} `)
     }
   }
 }

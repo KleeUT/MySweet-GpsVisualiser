@@ -31845,7 +31845,7 @@
 	          title:updatedData.name,
 	          map: map,
 	          // icon: "http://1.bp.blogspot.com/_GZzKwf6g1o8/S6xwK6CSghI/AAAAAAAAA98/_iA3r4Ehclk/s1600/marker-green.png"
-	        }, `<h1>${updatedData.name}</h1><p>${updatedData.lat} - ${updatedData.long}</p>`);
+	        }, `<h1>${updatedData.name}</h1><p>Lat: ${updatedData.lat} Long: ${updatedData.long}</p><p>Speed:${updatedData.speed}</p>`);
 	      }
 	    };
 	  
