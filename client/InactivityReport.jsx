@@ -9,8 +9,14 @@ module.exports = React.createClass({
 		$.ajax({
 			url:"/api/allInactivity",
 			success:function(data){
-				self.setState({inactivities:data.map(item => item.key = item.name)})
-			}
+				console.log(data);
+				self.setState({
+					inactivities:data.map(item =>{
+						item.key = item.name;
+						return item;
+					})
+				});
+			} 
 		})
 	},
 	render(){
@@ -30,10 +36,12 @@ module.exports = React.createClass({
 					<tbody>
 					{
 						this.state.inactivities.map(item =>{
+								console.log(item);
+
 							return(
 								<tr>
 									<td>{item.name}</td>
-									<td>{(item.stop - item.start)/100/60}</td>
+									<td>{formatDate(new Date(item.endTime) - new Date(item.startTime))}</td>
 									<td>{item.startTime}</td>
 									<td>{item.endTime}</td>
 									<td>{item.lat}</td>
@@ -46,5 +54,21 @@ module.exports = React.createClass({
 				</table>
 			</div>
 		)
+		
+		function formatDate(diff){
+			var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+			diff -=  days * (1000 * 60 * 60 * 24);
+			
+			var hours = Math.floor(diff / (1000 * 60 * 60));
+			diff -= hours * (1000 * 60 * 60);
+			
+			var mins = Math.floor(diff / (1000 * 60));
+			diff -= mins * (1000 * 60);
+			
+			var seconds = Math.floor(diff / (1000));
+			diff -= seconds * (1000);
+			
+			return `${hours}:${mins}:${seconds}`;
+		}
 	}
 })
