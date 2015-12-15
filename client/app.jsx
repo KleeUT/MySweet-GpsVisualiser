@@ -5,13 +5,17 @@ var Root = require('./root.jsx');
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route; 
-// import { Router, Route, Link } from 'react-router'
 
-
+var MapContainer = require('./MapContainer.jsx');
+var LocationSubmitForm = require('./LocationSubmitForm.jsx');
+var InactivityReport = require('./InactivityReport.jsx');
 
  ReactDOM.render(
    <Router>
     <Route path="/" component={Root}>
+      <Route path="Map" component={MapContainer} />
+      <Route path="LocationSubmit" component={LocationSubmitForm} />
+      <Route path="Inactivity" component={InactivityReport} />
     </Route>
    </Router>,
    document.getElementById('body')
