@@ -27,7 +27,7 @@ module.exports = React.createClass({
   /*
   * use google maps api built-in mechanism to attach dom events
   */
-  google.maps.event.addDomListener(window, "load", function () {
+  // google.maps.event.addDomListener(window, "load", function () {
   console.log("Dom Load");
 
   /*
@@ -122,7 +122,7 @@ module.exports = React.createClass({
     ioMessageHandlers['UpdatePosition'](msg);
   });   
 
-  });
+  // });
   },
   render(){
     return(
