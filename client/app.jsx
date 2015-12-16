@@ -9,13 +9,14 @@ var Route = ReactRouter.Route;
 var MapContainer = require('./MapContainer.jsx');
 var LocationSubmitForm = require('./LocationSubmitForm.jsx');
 var InactivityReport = require('./InactivityReport.jsx');
-
+var ConfigEditor = require('./ConfigEditor.jsx');
  ReactDOM.render(
    <Router>
     <Route path="/" component={Root}>
       <Route path="Map" component={MapContainer} />
       <Route path="LocationSubmit" component={LocationSubmitForm} />
       <Route path="Inactivity" component={InactivityReport} />
+      <Route path="Config" component={ConfigEditor} />
     </Route>
    </Router>,
    document.getElementById('body')

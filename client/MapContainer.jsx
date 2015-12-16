@@ -13,7 +13,7 @@ var DetailsDisplay = React.createClass({
   }
 })
 
-module.exports = React.createClass({
+var MapContainer = React.createClass({
   getInitialState(){
     return {points:[]}
   },
@@ -143,3 +143,4 @@ module.exports = React.createClass({
     );
   }
 });
+module.exports = MapContainer;

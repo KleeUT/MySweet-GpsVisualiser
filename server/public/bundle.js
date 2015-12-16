@@ -131,13 +131,14 @@
 	var MapContainer = __webpack_require__(301);
 	var LocationSubmitForm = __webpack_require__(302);
 	var InactivityReport = __webpack_require__(303);
-
+	var ConfigEditor = __webpack_require__(304);
 	 ReactDOM.render(
 	   React.createElement(Router, null, 
 	    React.createElement(Route, {path: "/", component: Root}, 
 	      React.createElement(Route, {path: "Map", component: MapContainer}), 
 	      React.createElement(Route, {path: "LocationSubmit", component: LocationSubmitForm}), 
-	      React.createElement(Route, {path: "Inactivity", component: InactivityReport})
+	      React.createElement(Route, {path: "Inactivity", component: InactivityReport}), 
+	      React.createElement(Route, {path: "Config", component: ConfigEditor})
 	    )
 	   ),
 	   document.getElementById('body')
@@ -31761,8 +31762,9 @@
 	                React.createElement("ul", {className: "nav navbar-nav"}, 
 	                  React.createElement("li", null, React.createElement(Link, {to: "#"}, "Home")), 
 	                  React.createElement("li", null, React.createElement(Link, {to: "/Map"}, "Map")), 
+	                  React.createElement("li", null, React.createElement(Link, {to: "/Inactivity"}, "Inactivity")), 
 	                  React.createElement("li", null, React.createElement(Link, {to: "/LocationSubmit"}, "Location Submit")), 
-	                  React.createElement("li", null, React.createElement(Link, {to: "/Inactivity"}, "Inactivity"))
+	                  React.createElement("li", null, React.createElement(Link, {to: "/Config"}, "Config"))
 	                )
 	              )
 	            )
@@ -36114,7 +36116,7 @@
 	  }
 	})
 
-	module.exports = React.createClass({displayName: "module.exports",
+	var MapContainer = React.createClass({displayName: "MapContainer",
 	  getInitialState(){
 	    return {points:[]}
 	  },
@@ -36244,7 +36246,7 @@
 	    );
 	  }
 	});
-
+	module.exports = MapContainer;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
@@ -36390,6 +36392,60 @@
 		}
 	})
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* @jsx React.DOM */
+	var React = __webpack_require__(95);
+	var EditForm = React.createClass({displayName: "EditForm",
+		getInitialState(){
+			return{key: this.props.id, value: this.props.value, dirty:false};	
+		},
+		edit(e){
+			this.setState({dirty: !this.state.dirty});	
+		},
+		render(){
+			console.log(this.state);
+			return(
+			React.createElement("tr", null, 
+			React.createElement("td", null, this.state.key), React.createElement("td", null, React.createElement("input", {type: "text", value: this.state.value, onChange: this.edit})), React.createElement("td", null, React.createElement("button", {className: "btn btn-primary", style: {display:this.state.dirty?"inline":"none"}}, "Save"))
+			)
+			)
+		}
+	});
+	var ConfigEditor = React.createClass({displayName: "ConfigEditor",
+		getInitialState(){
+			return {unmappedConfigItems: [{key:"test",value:"value test"}]};	
+		},
+		render(){
+			return(
+				React.createElement("div", null, 
+				React.createElement("h1", null, "Unmapped Ids"), 
+					React.createElement("table", {className: "table table-striped"}, 
+					React.createElement("thead", null, 
+					React.createElement("tr", null, 
+					React.createElement("th", null, "Id"), React.createElement("th", null, "Displayed Value")
+					)
+					), 
+					React.createElement("tbody", null, 
+					this.state.unmappedConfigItems.map(item => {
+						return(
+							React.createElement(EditForm, {id: item.key, value: item.value})
+						)
+					}
+					)
+					)
+					), 
+					React.createElement("h1", null, "Mapped ids"), 
+					React.createElement("button", {className: "btn btn-default"}, " + ")
+				)
+			)
+		}
+	});
+
+	module.exports = ConfigEditor;
 
 /***/ }
 /******/ ]);
