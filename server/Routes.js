@@ -72,17 +72,21 @@ module.exports = class{
       self.config.addIdIfUnmapped(id);
     });
     
-  app.get('/api/allInactivity', function(request, response){
-    response.json(self.inactivityTracker.getAllInactivities().map(function(item){
-      item.name = self.config.niceNameForId(item.id);
-      return item;
-    }));
-    // response.json([{"name":"c06bb203a0da4a17","lat":"-32.88687539606783","long":"151.689396260837","startTime":"2015-12-14T21:59:59.409Z","endTime":"2015-12-14T22:00:47.849Z"},{"name":"c06bb203a0da4a17","lat":"-32.886745790388126","long":"151.68944198808438","startTime":"2015-12-14T22:01:04.709Z","endTime":"2015-12-14T22:01:08.933Z"},{"name":"c06bb203a0da4a17","lat":"-32.88190555053697","long":"151.71887292131913","startTime":"2015-12-14T22:09:05.364Z","endTime":"2015-12-14T22:09:06.776Z"},{"name":"c06bb203a0da4a17","lat":"-32.881909347434046","long":"151.71887438621243","startTime":"2015-12-14T22:09:07.561Z","endTime":"2015-12-14T22:09:08.855Z"},{"name":"c06bb203a0da4a17","lat":"-32.88682547015907","long":"151.7208530615368","startTime":"2015-12-14T22:09:47.098Z","endTime":"2015-12-14T22:09:47.841Z"},{"name":"c06bb203a0da4a17","lat":"-32.88680239703516","long":"151.7208307281328","startTime":"2015-12-14T22:09:50.021Z","endTime":"2015-12-14T22:10:01.325Z"}]);
-  });
-  
-  app.get('/api/config/mappedandunmappedids', function(request, response){
-    response.json({mapped:self.config.allMappedIds(), unmapped:self.config.allUnmappedIds()});
-  })
+    app.get('/api/allInactivity', function(request, response){
+      response.json(self.inactivityTracker.getAllInactivities().map(function(item){
+        item.name = self.config.niceNameForId(item.id);
+        return item;
+      }));
+      // response.json([{"name":"c06bb203a0da4a17","lat":"-32.88687539606783","long":"151.689396260837","startTime":"2015-12-14T21:59:59.409Z","endTime":"2015-12-14T22:00:47.849Z"},{"name":"c06bb203a0da4a17","lat":"-32.886745790388126","long":"151.68944198808438","startTime":"2015-12-14T22:01:04.709Z","endTime":"2015-12-14T22:01:08.933Z"},{"name":"c06bb203a0da4a17","lat":"-32.88190555053697","long":"151.71887292131913","startTime":"2015-12-14T22:09:05.364Z","endTime":"2015-12-14T22:09:06.776Z"},{"name":"c06bb203a0da4a17","lat":"-32.881909347434046","long":"151.71887438621243","startTime":"2015-12-14T22:09:07.561Z","endTime":"2015-12-14T22:09:08.855Z"},{"name":"c06bb203a0da4a17","lat":"-32.88682547015907","long":"151.7208530615368","startTime":"2015-12-14T22:09:47.098Z","endTime":"2015-12-14T22:09:47.841Z"},{"name":"c06bb203a0da4a17","lat":"-32.88680239703516","long":"151.7208307281328","startTime":"2015-12-14T22:09:50.021Z","endTime":"2015-12-14T22:10:01.325Z"}]);
+    });
+    
+    app.get('/api/config/mappedandunmappedids', function(request, response){
+      response.json({mapped:self.config.allMappedIds(), unmapped:self.config.allUnmappedIds()});
+    });
+    
+    app.post('/api/config/map', function(request, response){
+      self.config.upsertMapping(request.body.key, request.body.value);
+    });
     
     function updateLocation(lat, long, id, speed){
       var updatedCoordinate = {"lat":lat, "long":long,"id":id, "speed":speed};

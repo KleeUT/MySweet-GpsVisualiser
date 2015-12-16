@@ -1,5 +1,4 @@
 /* @jsx React.DOM */
-var React = require('react');
 var Link = require('react-router').Link;
 module.exports = React.createClass({
    render(){
@@ -22,7 +21,7 @@ module.exports = React.createClass({
             </div>
           </nav>
          {this.props.children}
-         <footer><div style={{"textAlign":"right"}}>Klee Uhrig-Thomas</div></footer>
+         <footer><div style={{"textAlign":"right"}}>KleeUT</div></footer>
        </div>
      );
    }

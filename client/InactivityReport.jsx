@@ -1,6 +1,4 @@
-var React = require('react');
-
-module.exports = React.createClass({
+var InactivityReport = React.createClass({
 	getInitialState(){
 		return {inactivities:[]}	
 	},
@@ -71,4 +69,5 @@ module.exports = React.createClass({
 			return `${hours}:${mins}:${seconds}`;
 		}
 	}
-})
+});
+module.exports = InactivityReport;

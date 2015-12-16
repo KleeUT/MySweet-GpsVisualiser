@@ -1,5 +1,3 @@
-var React = require('react');
-
 var DetailsDisplay = React.createClass({
   render(){
     return (

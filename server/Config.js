@@ -22,12 +22,17 @@ module.exports = class{
 		return this.unmappedIds;
 	}
 	upsertMapping(key, value){
+		if(this.unmappedIds.has(key)){
+			this.unmappedIds.delete(key);
+		}
+		
 		this.mappings[key] = value;
 	}
 	addIdIfUnmapped(id){
 		if(this.mappings[id]){
 			return;
 		}
+		
 		this.unmappedIds.add(id);
 	}
 }
