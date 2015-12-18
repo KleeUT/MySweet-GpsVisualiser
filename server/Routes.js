@@ -69,7 +69,9 @@ module.exports = class{
       // self.io.emit('UpdatePosition',{'lat':lat,"long":long,"name":name});
       self.io.emit('UpdatePosition',{'lat':lat,"long":long,"name":name, "speed":speed});
       
-      self.config.addIdIfUnmapped(id);
+      self.config.addIdIfUnmapped(id, function(mapped, unmapped){
+        self.io.emit('ConfigUpdated',{mapped:mapped, unmapped:unmapped});
+      });
     });
     
     app.get('/api/allInactivity', function(request, response){
@@ -86,6 +88,7 @@ module.exports = class{
     
     app.post('/api/config/map', function(request, response){
       self.config.upsertMapping(request.body.key, request.body.value);
+      self.io.emit('ConfigUpdated',{mapped:self.config.allMappedIds(), unmapped:self.config.allUnmappedIds()});
     });
     
     function updateLocation(lat, long, id, speed){

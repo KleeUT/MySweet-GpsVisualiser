@@ -6,6 +6,7 @@ module.exports = class{
 			"c880b271":"Klees phone (SER)",
 		};
 		this.unmappedIds = new Set();
+		this.unmappedIds.add("1234567890");
 	}
 	niceNameForId(id){
 		return this.mappings[id] || id;
@@ -19,7 +20,9 @@ module.exports = class{
 		return mapArr;
 	}
 	allUnmappedIds(){
-		return this.unmappedIds;
+		return Array.from(this.unmappedIds).map(function(item){
+			return {key:item,value:undefined};
+		})
 	}
 	upsertMapping(key, value){
 		if(this.unmappedIds.has(key)){
@@ -28,11 +31,11 @@ module.exports = class{
 		
 		this.mappings[key] = value;
 	}
-	addIdIfUnmapped(id){
+	addIdIfUnmapped(id, configUpdatedCallback){
 		if(this.mappings[id]){
 			return;
 		}
-		
+		configUpdatedCallback(this.allMappedIds, this.allUnmappedIds);
 		this.unmappedIds.add(id);
 	}
 }

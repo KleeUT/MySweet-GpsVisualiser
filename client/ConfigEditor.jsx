@@ -20,9 +20,29 @@ var EditForm = React.createClass({
 		)
 	}
 });
+
 var ConfigEditor = React.createClass({
 	getInitialState(){
-		return {unmappedConfigItems: [{key:"test",value:"value test"}]};	
+		return {unmappedConfigItems: [], mappedConfigItems:[]};
+	},
+	componentDidMount(){
+		var self = this;
+		$.ajax({
+			url:'/api/config/mappedandunmappedids',
+			success:(data) => {
+				console.log(data);
+				self.setState({unmappedConfigItems: data.unmapped, mappedConfigItems:data.mapped})
+			},
+			error: (error) => {
+				console.log("error");
+			}
+		});
+	var socket = io();
+    socket.on('ConfigUpdated', function(msg){
+		console.log("ConfigUpdate Received");
+		self.setState({unmappedConfigItems: msg.unmapped, mappedConfigItems:msg.mapped})
+ 	});   
+		
 	},
 	configEntrySaved(key, newValue){
 		console.log(`Save called for ${key} with value ${newValue}`);
@@ -47,7 +67,22 @@ var ConfigEditor = React.createClass({
 				)}
 				</tbody>
 				</table>
-				<h1>Mapped ids</h1>
+				<h1>Mapped Ids</h1>
+								<table className="table table-striped">
+				<thead>
+				<tr>
+				<th>Id</th><th>Displayed Value</th>
+				</tr>
+				</thead>
+				<tbody>
+				{this.state.mappedConfigItems.map(item => {
+					return(
+						<EditForm id={item.key} value={item.value} onSave={this.configEntrySaved}/>
+					)
+				}
+				)}
+				</tbody>
+				</table>
 				<button className="btn btn-default"> + </button>
 			</div>
 		)

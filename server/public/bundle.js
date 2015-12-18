@@ -36189,6 +36189,7 @@
 	   });
 	   
 	  var socket = io();
+	  
 	  var ioMessageHandlers = {
 	    "UpdatePosition":(updatedData) => {
 	      if(markers[updatedData.name]){
@@ -36404,9 +36405,29 @@
 			)
 		}
 	});
+
 	var ConfigEditor = React.createClass({displayName: "ConfigEditor",
 		getInitialState(){
-			return {unmappedConfigItems: [{key:"test",value:"value test"}]};	
+			return {unmappedConfigItems: [], mappedConfigItems:[]};
+		},
+		componentDidMount(){
+			var self = this;
+			$.ajax({
+				url:'/api/config/mappedandunmappedids',
+				success:(data) => {
+					console.log(data);
+					self.setState({unmappedConfigItems: data.unmapped, mappedConfigItems:data.mapped})
+				},
+				error: (error) => {
+					console.log("error");
+				}
+			});
+		var socket = io();
+	    socket.on('ConfigUpdated', function(msg){
+			console.log("ConfigUpdate Received");
+			self.setState({unmappedConfigItems: msg.unmapped, mappedConfigItems:msg.mapped})
+	 	});   
+			
 		},
 		configEntrySaved(key, newValue){
 			console.log(`Save called for ${key} with value ${newValue}`);
@@ -36431,7 +36452,22 @@
 					)
 					)
 					), 
-					React.createElement("h1", null, "Mapped ids"), 
+					React.createElement("h1", null, "Mapped Ids"), 
+									React.createElement("table", {className: "table table-striped"}, 
+					React.createElement("thead", null, 
+					React.createElement("tr", null, 
+					React.createElement("th", null, "Id"), React.createElement("th", null, "Displayed Value")
+					)
+					), 
+					React.createElement("tbody", null, 
+					this.state.mappedConfigItems.map(item => {
+						return(
+							React.createElement(EditForm, {id: item.key, value: item.value, onSave: this.configEntrySaved})
+						)
+					}
+					)
+					)
+					), 
 					React.createElement("button", {className: "btn btn-default"}, " + ")
 				)
 			)

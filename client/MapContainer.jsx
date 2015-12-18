@@ -98,6 +98,7 @@ var MapContainer = React.createClass({
    });
    
   var socket = io();
+  
   var ioMessageHandlers = {
     "UpdatePosition":(updatedData) => {
       if(markers[updatedData.name]){
