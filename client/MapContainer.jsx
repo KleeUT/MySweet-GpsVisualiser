@@ -1,5 +1,3 @@
-var React = require('react');
-
 var DetailsDisplay = React.createClass({
   render(){
     return (
@@ -70,6 +68,7 @@ var MapContainer = React.createClass({
     });
    
   var socket = io();
+  
   var ioMessageHandlers = {
     "UpdatePosition":(updatedData) => {
         if(markers[updatedData.name]){

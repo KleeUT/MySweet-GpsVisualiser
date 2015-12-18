@@ -1,5 +1,4 @@
-var React = require('react');
-module.exports = React.createClass({
+var LocationSubmitForm = React.createClass({
   getInitialState(){
     return{lat:0.0,long:0.0,name:""}
   },
@@ -55,3 +54,5 @@ module.exports = React.createClass({
 
   }
 })
+
+module.exports = LocationSubmitForm
