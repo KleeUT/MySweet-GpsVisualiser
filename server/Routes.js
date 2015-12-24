@@ -77,6 +77,7 @@ module.exports = class{
     app.post('/api/config/map', function(request, response){
       self.config.upsertMapping(request.body.key, request.body.value);
       self.io.emit('ConfigUpdated',{mapped:self.config.allMappedIds(), unmapped:self.config.allUnmappedIds()});
+      response.json({});
     });
     
     function updateLocation(lat, long, id, speed){
