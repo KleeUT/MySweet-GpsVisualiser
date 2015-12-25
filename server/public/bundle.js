@@ -36205,15 +36205,24 @@
 	          React.createElement("nav", {className: "navbar navbar-default"}, 
 	            React.createElement("div", {className: "container-fluid"}, 
 	              React.createElement("div", {className: "navbar-header"}, 
-	                React.createElement("a", {className: "navbar-brand", href: "#"}, "My Sweet")
+	                React.createElement("button", {type: "button", className: "navbar-toggle collapsed", "data-toggle": "collapse", "data-target": "#bs-example-navbar-collapse-1", "aria-expanded": "false"}, 
+	                  React.createElement("span", {className: "sr-only"}, "Toggle navigation"), 
+	                  React.createElement("span", {className: "icon-bar"}), 
+	                  React.createElement("span", {className: "icon-bar"}), 
+	                  React.createElement("span", {className: "icon-bar"})
+	                ), 
+	                React.createElement(Link, {className: "navbar-brand", to: "#"}, "My Sweet")
 	              ), 
+	              
 	              React.createElement("div", null, 
-	                React.createElement("ul", {className: "nav navbar-nav"}, 
-	                  React.createElement("li", null, React.createElement(Link, {to: "#"}, "Home")), 
-	                  React.createElement("li", null, React.createElement(Link, {to: "/Map"}, "Map")), 
-	                  React.createElement("li", null, React.createElement(Link, {to: "/Inactivity"}, "Inactivity")), 
-	                  React.createElement("li", null, React.createElement(Link, {to: "/LocationSubmit"}, "Location Submit")), 
-	                  React.createElement("li", null, React.createElement(Link, {to: "/Config"}, "Config"))
+	                React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
+	                  React.createElement("ul", {className: "nav navbar-nav"}, 
+	                    React.createElement("li", null, React.createElement(Link, {to: "#"}, "Home")), 
+	                    React.createElement("li", null, React.createElement(Link, {to: "/Map"}, "Map")), 
+	                    React.createElement("li", null, React.createElement(Link, {to: "/Inactivity"}, "Inactivity")), 
+	                    React.createElement("li", null, React.createElement(Link, {to: "/LocationSubmit"}, "Location Submit")), 
+	                    React.createElement("li", null, React.createElement(Link, {to: "/Config"}, "Config"))
+	                  )
 	                )
 	              )
 	            )
@@ -36248,7 +36257,7 @@
 					this.state.links.map(item =>{
 						return (
 							React.createElement(Link, {to: item.url}, 
-								React.createElement("div", {className: "well col-xxs-12, col-xs-4, col-md-3", style: {margin:10}}, 
+								React.createElement("div", {className: "well col-sr-12, col-xs-4, col-md-3", style: {margin:10}}, 
 									React.createElement("h2", null, item.name)
 								)
 							)

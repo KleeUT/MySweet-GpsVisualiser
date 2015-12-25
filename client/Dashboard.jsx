@@ -16,7 +16,7 @@ var Dashboard = React.createClass({
 				{this.state.links.map(item =>{
 					return (
 						<Link to={item.url}>
-							<div className="well col-xxs-12, col-xs-4, col-md-3" style={{margin:10}}>
+							<div className="well col-xs-12, col-xs-4, col-md-3" style={{margin:10}}>
 								<h2>{item.name}</h2>
 							</div>
 						</Link>
