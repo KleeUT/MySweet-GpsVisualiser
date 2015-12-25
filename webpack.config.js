@@ -30,7 +30,9 @@ module.exports = {
    ],
    externals:{
      "google":"google",
-     "io":"io"
+     "io":"io",
+     "React":"React",
+     "ReactDom":"ReactDom"
    }
 
 };
