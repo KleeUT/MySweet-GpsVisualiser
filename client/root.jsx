@@ -1,5 +1,22 @@
 var Link = require('react-router').Link;
 module.exports = React.createClass({
+    getInitialState(){
+        return({links:[]});   
+    },
+    componentDidMount(){
+        var self = this;
+		$.ajax({
+			url:"/api/topLevelLinks",
+			success:function(item){
+                console.log("received links");
+				self.setState({links:item.links});
+			},
+			error:function(item){
+				console.log("error occured");
+				console.log(item)
+			}
+		});
+	},
    render(){
      return (
        <div className='container'>
@@ -19,10 +36,12 @@ module.exports = React.createClass({
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="nav navbar-nav">
                     <li><Link to="#">Home</Link></li>
-                    <li><Link to='/Map'>Map</Link></li>
-                    <li><Link to='/Inactivity'>Inactivity</Link></li>
-                    <li><Link to='/LocationSubmit'>Location Submit</Link></li>
-                    <li><Link to='/Config'>Config</Link></li>
+                    {this.state.links.map(function(item){
+                       return(<li>
+                        <Link to={item.url}>{item.title}</Link>
+                       </li>); 
+                    })}
+                    
                   </ul>
                 </div>
               </div>

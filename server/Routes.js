@@ -10,12 +10,24 @@ module.exports = class{
     this.config = new Config();
     this.inactivityTracker = new InactivityTracker();
   }
+  
   initializeRoutes(){
     var self = this;
     var app = self.app;
     self.io.on('connection', function(socket){
       console.log('connection established');
     });
+    
+    app.get('/api/topLevelLinks', function(request, response){
+      var links = [
+        {url:"/Map", title:"Map"},
+        {url:"/LoctionSubmit", title:"Location Submit"},
+        {url:"/Inactivity", title:"Inactivity Tracker"},
+        {url:"/Config", title:"Config"},
+      ]
+      response.json({links:links});
+    });
+    
     app.get('/api/locations', function(request, response){
       var arr = [];
       for(var p in self.data){

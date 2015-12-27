@@ -2,13 +2,22 @@ var Link = require('react-router').Link;
 var Dashboard = React.createClass({
 	getInitialState(){
 		return {
-			links:[
-				{url:"/Map", name:"Map"},
-				{url:"/Inactivity", name:"Inactivity"},
-				{url:"/LocationSubmit", name:"Location Submit"},
-				{url:"/Config", name:"Config"},
-			]
+			links:[ ]
 		}
+	},
+	componentDidMount(){
+        var self = this;
+		$.ajax({
+			url:"/api/topLevelLinks",
+			success:function(item){
+                console.log("received links");
+				self.setState({links:item.links});
+			},
+			error:function(item){
+				console.log("error occured");
+				console.log(item)
+			}
+		});
 	},
 	render(){
 		return(
@@ -17,7 +26,7 @@ var Dashboard = React.createClass({
 					return (
 						<Link to={item.url}>
 							<div className="well col-xs-12, col-xs-4, col-md-3" style={{margin:10}}>
-								<h2>{item.name}</h2>
+								<h2>{item.title}</h2>
 							</div>
 						</Link>
 					)

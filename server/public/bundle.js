@@ -36197,8 +36197,25 @@
 /* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Link = __webpack_require__(95).Link;
+	/* WEBPACK VAR INJECTION */(function($) {var Link = __webpack_require__(95).Link;
 	module.exports = React.createClass({displayName: "module.exports",
+	    getInitialState(){
+	        return({links:[]});   
+	    },
+	    componentDidMount(){
+	        var self = this;
+			$.ajax({
+				url:"/api/topLevelLinks",
+				success:function(item){
+	                console.log("received links");
+					self.setState({links:item.links});
+				},
+				error:function(item){
+					console.log("error occured");
+					console.log(item)
+				}
+			});
+		},
 	   render(){
 	     return (
 	       React.createElement("div", {className: "container"}, 
@@ -36218,10 +36235,12 @@
 	                React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
 	                  React.createElement("ul", {className: "nav navbar-nav"}, 
 	                    React.createElement("li", null, React.createElement(Link, {to: "#"}, "Home")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/Map"}, "Map")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/Inactivity"}, "Inactivity")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/LocationSubmit"}, "Location Submit")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/Config"}, "Config"))
+	                    this.state.links.map(function(item){
+	                       return(React.createElement("li", null, 
+	                        React.createElement(Link, {to: item.url}, item.title)
+	                       )); 
+	                    })
+	                    
 	                  )
 	                )
 	              )
@@ -36234,22 +36253,32 @@
 	   }
 	 });
 
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
 /* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Link = __webpack_require__(95).Link;
+	/* WEBPACK VAR INJECTION */(function($) {var Link = __webpack_require__(95).Link;
 	var Dashboard = React.createClass({displayName: "Dashboard",
 		getInitialState(){
 			return {
-				links:[
-					{url:"/Map", name:"Map"},
-					{url:"/Inactivity", name:"Inactivity"},
-					{url:"/LocationSubmit", name:"Location Submit"},
-					{url:"/Config", name:"Config"},
-				]
+				links:[ ]
 			}
+		},
+		componentDidMount(){
+	        var self = this;
+			$.ajax({
+				url:"/api/topLevelLinks",
+				success:function(item){
+	                console.log("received links");
+					self.setState({links:item.links});
+				},
+				error:function(item){
+					console.log("error occured");
+					console.log(item)
+				}
+			});
 		},
 		render(){
 			return(
@@ -36257,8 +36286,8 @@
 					this.state.links.map(item =>{
 						return (
 							React.createElement(Link, {to: item.url}, 
-								React.createElement("div", {className: "well col-sr-12, col-xs-4, col-md-3", style: {margin:10}}, 
-									React.createElement("h2", null, item.name)
+								React.createElement("div", {className: "well col-xs-12, col-xs-4, col-md-3", style: {margin:10}}, 
+									React.createElement("h2", null, item.title)
 								)
 							)
 						)
@@ -36269,6 +36298,7 @@
 	});
 
 	module.exports = Dashboard;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
 /* 303 */
