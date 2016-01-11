@@ -125,22 +125,36 @@
 	var Router = ReactRouter.Router;
 	var Route = ReactRouter.Route; 
 	var IndexRoute = ReactRouter.IndexRoute;
+	var BrowserHistory = ReactRouter.browserHistory; 
 
-	var Root = __webpack_require__(301);
-	var Dashboard = __webpack_require__(302);
-	var MapContainer = __webpack_require__(303);
-	var LocationSubmitForm = __webpack_require__(304);
-	var InactivityReport = __webpack_require__(305);
-	var ConfigEditor = __webpack_require__(306);
+	var auth = __webpack_require__(301);
+
+	var Root = __webpack_require__(302);
+	var Dashboard = __webpack_require__(303);
+	var MapContainer = __webpack_require__(304);
+	var LocationSubmitForm = __webpack_require__(305);
+	var InactivityReport = __webpack_require__(306);
+	var ConfigEditor = __webpack_require__(307);
+	var Login = __webpack_require__(308);
+	var Logout = __webpack_require__(309);
+
+	function requireAuth(nextState, replaceState) {
+	    console.log(`Logged in: ${auth.loggedIn()}`);
+	    if (!auth.loggedIn()) {
+	        replaceState({ nextPathname: nextState.location.pathname }, '/Login')
+	    }
+	}
 
 	 ReactDOM.render(
-	   React.createElement(Router, null, 
+	   React.createElement(Router, {history: BrowserHistory}, 
 	    React.createElement(Route, {path: "/", component: Root}, 
-	      React.createElement(IndexRoute, {component: Dashboard}), 
-	      React.createElement(Route, {path: "Map", component: MapContainer}), 
-	      React.createElement(Route, {path: "LocationSubmit", component: LocationSubmitForm}), 
-	      React.createElement(Route, {path: "Inactivity", component: InactivityReport}), 
-	      React.createElement(Route, {path: "Config", component: ConfigEditor})
+	      React.createElement(IndexRoute, {component: Dashboard, onEnter: requireAuth}), 
+	      React.createElement(Route, {path: "Map", component: MapContainer, onEnter: requireAuth}), 
+	      React.createElement(Route, {path: "LocationSubmit", component: LocationSubmitForm, onEnter: requireAuth}), 
+	      React.createElement(Route, {path: "Inactivity", component: InactivityReport, onEnter: requireAuth}), 
+	      React.createElement(Route, {path: "Config", component: ConfigEditor, onEnter: requireAuth}), 
+	      React.createElement(Route, {path: "Login", component: Login}), 
+	      React.createElement(Route, {path: "Logout", component: Logout, onEnter: requireAuth})
 	    )
 	   ),
 	   document.getElementById('body')
@@ -36195,10 +36209,85 @@
 
 /***/ },
 /* 301 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+	  login: function login(email, pass, cb) {
+	    var _this = this;
+
+	    cb = arguments[arguments.length - 1];
+	    if (localStorage.token) {
+	      if (cb) cb(true);
+	      this.onChange(true);
+	      return;
+	    }
+	    pretendRequest(email, pass, function (res) {
+	      if (res.authenticated) {
+	        localStorage.token = res.token;
+	        if (cb) cb(true);
+	        _this.onChange(true);
+	      } else {
+	        if (cb) cb(false);
+	        _this.onChange(false);
+	      }
+	    });
+	  },
+
+	  getToken: function getToken() {
+	    return localStorage.token;
+	  },
+
+	  logout: function logout(cb) {
+	    delete localStorage.token;
+	    if (cb) cb();
+	    this.onChange(false);
+	  },
+
+	  loggedIn: function loggedIn() {
+	    return !!localStorage.token;
+	  },
+
+	  onChange: function onChange() {}
+	};
+
+	function pretendRequest(email, pass, cb) {
+	  setTimeout(function () {
+	    if (email === 'joe@example.com' && pass === 'password1') {
+	      cb({
+	        authenticated: true,
+	        token: Math.random().toString(36).substring(7)
+	      });
+	    } else {
+	      cb({ authenticated: false });
+	    }
+	  }, 0);
+	}
+
+/***/ },
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Link = __webpack_require__(95).Link;
+	/* WEBPACK VAR INJECTION */(function($) {var Link = __webpack_require__(95).Link;
 	module.exports = React.createClass({displayName: "module.exports",
+	    getInitialState(){
+	        return({links:[]});   
+	    },
+	    componentDidMount(){
+	        var self = this;
+			$.ajax({
+				url:"/api/topLevelLinks",
+				success:function(item){
+	                console.log("received links");
+					self.setState({links:item.links});
+				},
+				error:function(item){
+					console.log("error occured");
+					console.log(item)
+				}
+			});
+		},
 	   render(){
 	     return (
 	       React.createElement("div", {className: "container"}, 
@@ -36211,17 +36300,18 @@
 	                  React.createElement("span", {className: "icon-bar"}), 
 	                  React.createElement("span", {className: "icon-bar"})
 	                ), 
-	                React.createElement(Link, {className: "navbar-brand", to: "#"}, "My Sweet")
+	                React.createElement(Link, {className: "navbar-brand", to: "#"}, "Demo")
 	              ), 
 	              
 	              React.createElement("div", null, 
 	                React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
 	                  React.createElement("ul", {className: "nav navbar-nav"}, 
-	                    React.createElement("li", null, React.createElement(Link, {to: "#"}, "Home")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/Map"}, "Map")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/Inactivity"}, "Inactivity")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/LocationSubmit"}, "Location Submit")), 
-	                    React.createElement("li", null, React.createElement(Link, {to: "/Config"}, "Config"))
+	                    this.state.links.map(function(item){
+	                       return(React.createElement("li", null, 
+	                        React.createElement(Link, {to: item.url}, item.title)
+	                       )); 
+	                    })
+	                    
 	                  )
 	                )
 	              )
@@ -36234,22 +36324,32 @@
 	   }
 	 });
 
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Link = __webpack_require__(95).Link;
+	/* WEBPACK VAR INJECTION */(function($) {var Link = __webpack_require__(95).Link;
 	var Dashboard = React.createClass({displayName: "Dashboard",
 		getInitialState(){
 			return {
-				links:[
-					{url:"/Map", name:"Map"},
-					{url:"/Inactivity", name:"Inactivity"},
-					{url:"/LocationSubmit", name:"Location Submit"},
-					{url:"/Config", name:"Config"},
-				]
+				links:[ ]
 			}
+		},
+		componentDidMount(){
+	        var self = this;
+			$.ajax({
+				url:"/api/topLevelLinks",
+				success:function(item){
+	                console.log("received links");
+					self.setState({links:item.links});
+				},
+				error:function(item){
+					console.log("error occured");
+					console.log(item)
+				}
+			});
 		},
 		render(){
 			return(
@@ -36257,8 +36357,8 @@
 					this.state.links.map(item =>{
 						return (
 							React.createElement(Link, {to: item.url}, 
-								React.createElement("div", {className: "well col-sr-12, col-xs-4, col-md-3", style: {margin:10}}, 
-									React.createElement("h2", null, item.name)
+								React.createElement("div", {className: "well col-xs-12, col-xs-4, col-md-3", style: {margin:10}}, 
+									React.createElement("h2", null, item.title)
 								)
 							)
 						)
@@ -36269,9 +36369,10 @@
 	});
 
 	module.exports = Dashboard;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {var DetailsDisplay = React.createClass({displayName: "DetailsDisplay",
@@ -36386,7 +36487,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {var LocationSubmitForm = React.createClass({displayName: "LocationSubmitForm",
@@ -36450,7 +36551,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {var InactivityReport = React.createClass({displayName: "InactivityReport",
@@ -36529,7 +36630,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {/* @jsx React.DOM */
@@ -36691,6 +36792,87 @@
 
 	module.exports = ConfigEditor;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(83)))
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var auth = __webpack_require__(301);
+	const Login = React.createClass({displayName: "Login",
+
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+
+	  getInitialState() {
+	    return {
+	      error: false
+	    }
+	  },
+
+	  handleSubmit(event) {
+	    event.preventDefault()
+
+	    const email = this.refs.email.value
+	    const pass = this.refs.pass.value
+
+	    auth.login(email, pass, (loggedIn) => {
+	      if (!loggedIn)
+	        return this.setState({ error: true })
+
+	      const  location = this.props
+
+	      if (location.state && location.state.nextPathname) {
+	          console.log("1");
+	          console.log(`${this === undefined} ${this.context === undefined} ${this.context.router === undefined}`);
+	        this.context.router.replace(location.state.nextPathname)
+	      } else {
+	          console.log("1");
+	          
+	          console.log(`${this === undefined} ${this.context === undefined} ${this.context.router === undefined}`);
+	        this.context.router.replace('/')
+	      }
+	    })
+	  },
+
+	  render() {
+	    return (
+	      React.createElement("form", {onSubmit: this.handleSubmit}, 
+	      React.createElement("div", {className: "form-group"}, 
+	        React.createElement("input", {ref: "email", placeholder: "email", defaultValue: "joe@example.com", className: "form-control"})
+	      ), 
+	      React.createElement("div", {className: "form-group"}, 
+	        React.createElement("input", {ref: "pass", placeholder: "password", className: "form-control"}), " (hint: password1)"
+	        ), 
+	      React.createElement("div", {className: "form-group"}, 
+	      React.createElement("button", {type: "submit", className: "form-control btn-primary"}, "Login")
+	      ), 
+	        this.state.error && (
+	          React.createElement("p", null, "Bad login information")
+	        )
+	      )
+	    )
+	  }
+	});
+
+	module.exports = Login;
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var auth = __webpack_require__(301);
+	const Logout = React.createClass({displayName: "Logout",
+	  componentDidMount() {
+	    auth.logout()
+	  },
+
+	  render() {
+	    return React.createElement("p", null, "You are now logged out")
+	  }
+	});
+
+	module.exports = Logout;
 
 /***/ }
 /******/ ]);
