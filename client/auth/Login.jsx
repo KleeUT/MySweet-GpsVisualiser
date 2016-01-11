@@ -2,7 +2,7 @@ var auth = require('./auth.js');
 const Login = React.createClass({
 
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
   },
 
   getInitialState() {
@@ -38,7 +38,7 @@ const Login = React.createClass({
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} role="form">
       <div className="form-group">
         <input ref="email" placeholder="email" defaultValue="joe@example.com" className="form-control"/>
       </div>
