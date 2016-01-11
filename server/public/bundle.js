@@ -121,22 +121,22 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(71);
-	var ReactRouter = __webpack_require__(95);
-	var Router = ReactRouter.Router;
-	var Route = ReactRouter.Route; 
-	var IndexRoute = ReactRouter.IndexRoute;
-	var browserHistory = ReactRouter.browserHistory; 
+	const ReactRouter = __webpack_require__(95);
+	const Router = ReactRouter.Router;
+	const Route = ReactRouter.Route; 
+	const IndexRoute = ReactRouter.IndexRoute;
+	const browserHistory = ReactRouter.browserHistory; 
 
-	var auth = __webpack_require__(310);
+	const auth = __webpack_require__(310);
 
-	var Root = __webpack_require__(311);
-	var Dashboard = __webpack_require__(312);
-	var MapContainer = __webpack_require__(313);
-	var LocationSubmitForm = __webpack_require__(314);
-	var InactivityReport = __webpack_require__(315);
-	var ConfigEditor = __webpack_require__(316);
+	const Root = __webpack_require__(311);
+	const Dashboard = __webpack_require__(312);
+	const MapContainer = __webpack_require__(313);
+	const LocationSubmitForm = __webpack_require__(314);
+	const InactivityReport = __webpack_require__(315);
+	const ConfigEditor = __webpack_require__(316);
 	const Login = __webpack_require__(317);
-	var Logout = __webpack_require__(318);
+	const Logout = __webpack_require__(318);
 
 	function requireAuth(nextState, replaceState) {
 	    console.log(`Logged in: ${auth.loggedIn()}`);
@@ -36838,7 +36838,7 @@
 	                  React.createElement("span", {className: "icon-bar"}), 
 	                  React.createElement("span", {className: "icon-bar"})
 	                ), 
-	                React.createElement(Link, {className: "navbar-brand", to: "#"}, "Demo")
+	                React.createElement(Link, {className: "navbar-brand", to: "/"}, "Demo")
 	              ), 
 	              
 	              React.createElement("div", null, 
@@ -37340,8 +37340,6 @@
 
 	  contextTypes: {
 	    router: React.PropTypes.object.isRequired,
-	    location: React.PropTypes.object.isRequired,
-	    history: React.PropTypes.object.isRequired
 	  },
 
 	  getInitialState() {
