@@ -21,7 +21,6 @@ module.exports = class{
     app.get('/api/topLevelLinks', function(request, response){
       var links = [
         {url:"/Map", title:"Map"},
-        {url:"/LoctionSubmit", title:"Location Submit"},
         {url:"/Inactivity", title:"Inactivity Tracker"},
         {url:"/Config", title:"Config"},
         {url:"/Logout", title:"Logout"}
@@ -32,7 +31,7 @@ module.exports = class{
     app.get('/api/locations', function(request, response){
       var arr = [];
       for(var p in self.data){
-        p.name = self.config.niceNameForId(data.name);
+        // p.name = self.config.niceNameForId(p.id);
         arr.push(self.data[p]);
       }
       response.json(arr);
@@ -94,8 +93,8 @@ module.exports = class{
     });
     
     function updateLocation(lat, long, id, speed){
-      var updatedCoordinate = {"lat":lat, "long":long,"id":id, "speed":speed};
-      self.data[updatedCoordinate.name] = updatedCoordinate;
+      var updatedCoordinate = {"lat":lat, "long":long,"id":id, "speed":speed, "name":self.config.niceNameForId(id)};
+      self.data[updatedCoordinate.id] = updatedCoordinate;
       console.log(`${updatedCoordinate.lat}, ${updatedCoordinate.long}, ${updatedCoordinate.name}, ${speed} `)
     }
   }

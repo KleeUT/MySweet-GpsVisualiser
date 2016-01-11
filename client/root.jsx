@@ -29,7 +29,7 @@ module.exports = React.createClass({
                   <span className="icon-bar"></span>
                   <span className="icon-bar"></span>
                 </button>              
-                <Link className="navbar-brand" to="#">Demo</Link>
+                <Link className="navbar-brand" to="/">Demo</Link>
               </div>
               
               <div>
