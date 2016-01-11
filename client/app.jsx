@@ -1,20 +1,20 @@
 require('bootstrap-webpack');
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route; 
-var IndexRoute = ReactRouter.IndexRoute;
-var BrowserHistory = ReactRouter.browserHistory; 
+const ReactRouter = require('react-router');
+const Router = ReactRouter.Router;
+const Route = ReactRouter.Route; 
+const IndexRoute = ReactRouter.IndexRoute;
+const browserHistory = ReactRouter.browserHistory; 
 
-var auth = require('./auth/auth.js');
+const auth = require('./auth/auth.js');
 
-var Root = require('./root.jsx');
-var Dashboard = require("./Dashboard.jsx");
-var MapContainer = require('./MapContainer.jsx');
-var LocationSubmitForm = require('./LocationSubmitForm.jsx');
-var InactivityReport = require('./InactivityReport.jsx');
-var ConfigEditor = require('./ConfigEditor.jsx');
-var Login = require('./auth/Login.jsx');
-var Logout = require('./auth/Logout.jsx');
+const Root = require('./root.jsx');
+const Dashboard = require("./Dashboard.jsx");
+const MapContainer = require('./MapContainer.jsx');
+const LocationSubmitForm = require('./LocationSubmitForm.jsx');
+const InactivityReport = require('./InactivityReport.jsx');
+const ConfigEditor = require('./ConfigEditor.jsx');
+const Login = require('./auth/Login.jsx');
+const Logout = require('./auth/Logout.jsx');
 
 function requireAuth(nextState, replaceState) {
     console.log(`Logged in: ${auth.loggedIn()}`);
@@ -22,9 +22,9 @@ function requireAuth(nextState, replaceState) {
         replaceState({ nextPathname: nextState.location.pathname }, '/Login')
     }
 }
-
- ReactDOM.render(
-   <Router history={BrowserHistory}>
+   
+ ReactDOM.render((
+   <Router history={browserHistory}>
     <Route path="/" component={Root}>
       <IndexRoute component={Dashboard}  onEnter={requireAuth}/>
       <Route path="Map" component={MapContainer} onEnter={requireAuth}/>
@@ -34,6 +34,6 @@ function requireAuth(nextState, replaceState) {
       <Route path="Login" component={Login} />
       <Route path="Logout" component={Logout} onEnter={requireAuth}/>
     </Route>    
-   </Router>,
+   </Router>),
    document.getElementById('body')
  );
