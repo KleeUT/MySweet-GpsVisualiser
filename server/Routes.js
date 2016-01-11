@@ -24,6 +24,7 @@ module.exports = class{
         {url:"/LoctionSubmit", title:"Location Submit"},
         {url:"/Inactivity", title:"Inactivity Tracker"},
         {url:"/Config", title:"Config"},
+        {url:"/Logout", title:"Logout"}
       ]
       response.json({links:links});
     });

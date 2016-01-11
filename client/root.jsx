@@ -29,13 +29,12 @@ module.exports = React.createClass({
                   <span className="icon-bar"></span>
                   <span className="icon-bar"></span>
                 </button>              
-                <Link className="navbar-brand" to="#">My Sweet</Link>
+                <Link className="navbar-brand" to="#">Demo</Link>
               </div>
               
               <div>
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="nav navbar-nav">
-                    <li><Link to="#">Home</Link></li>
                     {this.state.links.map(function(item){
                        return(<li>
                         <Link to={item.url}>{item.title}</Link>

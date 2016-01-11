@@ -20,8 +20,8 @@ var routes = new Routes(app, io);
 routes.initializeRoutes();
 
 var server = http.listen(process.env.PORT, function () {
-  // var host = server.address().address;
-  // var port = server.address().port;
+  var host = server.address().address;
+  var port = server.address().port;
 
-  console.log(`Example app listening`);
+  console.log(`Example app listening ${host} : ${port}`);
 });
