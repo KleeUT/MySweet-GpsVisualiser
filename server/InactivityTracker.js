@@ -6,35 +6,39 @@ module.exports = class{
 	}
 	gpsInfoReceived(gpsPositionData){
 		if(gpsPositionData.speed == 0){
-			console.log(`stopped for ${gpsPositionData.id}`);
-			if(this.currentInactivies[gpsPositionData.name]){
+			if(this.currentInactivies[gpsPositionData.id]){
 				// Info: We've aready got an inactivy started for this exit early.
 				return;
 			}
 			
-			this.currentInactivies[gpsPositionData.name] = {
-				name: gpsPositionData.name,
+			this.currentInactivies[gpsPositionData.id] = {
+                id:gpsPositionData.id,
 				lat:gpsPositionData.lat,
 				long:gpsPositionData.long, 
-				startTime: new Date()}
-
+				startTime: gpsPositionData.time}
 		}
 		else{
-			console.log(`moving for ${gpsPositionData.id}`);
-			if(!this.currentInactivies[gpsPositionData.name]){
-				
+			if(!this.currentInactivies[gpsPositionData.id]){
 				// Info: We dont have a started inactivity, normal case
 				return;
 			}
 			
-			var inactivity = this.currentInactivies[gpsPositionData.name]
-			inactivity.endTime = new Date();
-			this.currentInactivies[gpsPositionData.name] = undefined;
+			var inactivity = this.currentInactivies[gpsPositionData.id]
+			inactivity.endTime = gpsPositionData.time;
+			this.currentInactivies[gpsPositionData.id] = undefined;
 			this.inactivies.push(inactivity);
-			console.log(`inactivites are ${JSON.stringify(this.inactivies)}`);
 		}
 	}
 	getAllInactivities(){
-		return this.inactivies;
+        var inactivites = this.inactivies;
+        
+        for(var id in this.currentInactivies){
+            var inactivity = this.currentInactivies[id];
+            if(!(inactivity === undefined)){
+                inactivites.push(inactivity);
+            }
+        }
+
+		return inactivites;
 	}
 }

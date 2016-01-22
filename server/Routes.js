@@ -3,11 +3,11 @@ var Config = require('./Config.js');
 var InactivityTracker = require('./InactivityTracker.js');
 
 module.exports = class{
-  constructor(app, io){
+  constructor(app, io, config){
     this.app = app;
     this.data = {};
     this.io = io;
-    this.config = new Config();
+    this.config = config;
     this.inactivityTracker = new InactivityTracker();
   }
   
@@ -57,14 +57,16 @@ module.exports = class{
       var long = data.long;
       var id = data.name;
       var name = self.config.niceNameForId(data.name);
-      var speed = data.s;
+      var speed = data.s
+      var time = data.time;
       
       updateLocation(lat, long, id, speed);
       self.inactivityTracker.gpsInfoReceived({
         id:id,
         lat:lat,
         long:long,
-        speed:speed
+        speed:speed,
+        time:time
       })      
 
       response.json({});
@@ -76,7 +78,7 @@ module.exports = class{
     });
     
     app.get('/api/allInactivity', function(request, response){
-      response.json(self.inactivityTracker.getAllInactivities().map(function(item){
+        response.json(self.inactivityTracker.getAllInactivities().map(function(item){
         item.name = self.config.niceNameForId(item.id);
         return item;
       }));
